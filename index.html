@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>A Very Cheesy Christmas Carol Collab!</title>
+    <link rel="stylesheet" href="./style.css">
+    <link rel="icon" href="./favicon.ico" type="image/x-icon">
+  </head>
+  <body>
+    <main>
+      <input type="text" name="website" id="website" style="display:none"
+             tabindex="-1" autocomplete="off" aria-hidden="true">
+      <section class="countdown-container" style="text-align: center; margin-bottom: 2rem;">
+        <h2>Application Deadline</h2>
+        <p id="countdown" style="font-size: 1.5rem; font-weight: bold; color: #d9534f;">Calculating...</p>
+      </section>
+      <section class="rules">
+        <h2>Please read before applying</h2>
+        <ol>
+          <li>You must be Scouted in the Art Portal!</li>
+          <li>Absolutely NO AI-generated imagery! Zilch! Nada!</li>
+          <li>The OC you submit must belong to you! You may not submit a fan character or a friend's OC, it must be of your own creation! You must also offer a good-looking submission of them from the Art Portal. Failure to do so will deny you entry.</li>
+          <li>The rating for this collab will range from E to T. You're free to be a little risqué with your OC and their outfits if you so desire, but do your best not to push boundaries and cross lines. If you don't, then you'll get a warning from Yours Truly. If you don't heed it, then I'll have to kick you out of the collab.</li>
+          <li>The frames for when you meet an OC at their door will be at a 1:2 ratio with a minimum size of 512 x 1024 pixels. You're free to make the image larger so long as it is always twice as a tall as it is wide. Adjustments may need to be made to excessively large images, however.</li>
+          <li>You will also be making two 100x100 icons for both a "First Met" medal as well as a "Reward" medal.</li>
+          <li>You will be tasked with drawing overworld sprites for your characters. This will simply be a two frame walk cycle for left/right, up, and down, so 8 sprites total. 128x64 Spritesheet (32x32 per frame).</li>
+          <li>Like with Tank-or-Treat, there will a maximum limit of 100 unique houses and 48 apartment doors (as of writing this, anyhow.)</li>
+        </ol>
+        <h3>The forum topic: <a href="https://www.newgrounds.com/bbs/topic/1563691/1">A Very Cheesy Christmas Carol Collab!</a></h3>
+      </section>
+
+      <section id="step-1" class="login">
+        <h2>Step 1 - Sign in</h2>
+        <button type="button" id="ng-login-btn">Log in with Newgrounds</button>
+        <p id="login-status"></p>
+      </section>
+
+      <div id="step-2" class="hidden">
+        <h2>Step 2 - Upload your assets</h2>
+        <form id="application-form">
+          <fieldset>
+            <legend>Character at the House, at 1:2 ratio. 512x1024 minimum, 1024x2048 maximum.</legend>
+            <label class="upload">Door Texture
+              <input type="file" id="door" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Door preview" hidden>
+            </label>
+            <label class="upload">Character at Door
+              <input type="file" id="idle" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Idle frame preview" hidden>
+            </label>
+            <label class="upload">Song Liked
+              <input type="file" id="success" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Success frame preview" hidden>
+            </label>
+            <label class="upload">Song Disliked
+              <input type="file" id="fail" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Fail frame preview" hidden>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Icons, exactly 100x100</legend>
+            <label class="upload">"Met" icon
+              <input type="file" id="met-icon" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Met icon preview" hidden>
+            </label>
+            <label class="upload">"Completion Award" icon
+              <input type="file" id="award-icon" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Award icon preview" hidden>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Character Overworld Sprites, 128x64 Spritesheet, 32x32 per frame</legend>
+            <label class="upload">Spritesheet upload
+              <input type="file" id="sprite-sheet" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="Spritesheet preview" hidden>
+            </label>
+          </fieldset>
+
+          <fieldset>
+            <legend>Custom House, exactly 224x160 (optional)</legend>
+            <label class="upload">House base
+              <input type="file" id="house-base" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="House base preview" hidden>
+            </label>
+            <label class="upload">House layer (when resident leaves)
+              <input type="file" id="house-layer" accept="image/png, image/webp, .png, .webp">
+              <img class="preview" alt="House layer preview" hidden>
+            </label>
+          </fieldset>
+
+          <div id="step-3" class="hidden">
+            <h2>Step 3 - Submit!</h2>
+            <button type="button" id="submit-btn">Submit application</button>
+          </div>
+        </form>
+      </div>
+
+      <p id="status"></p>
+    </main>
+    <script src="index.js"></script>
+  </body>
+</html>
