@@ -1,16 +1,15 @@
-const backendUrl = 'https://script.google.com/macros/s/AKfycbxEXM9N2IqlqLvJzmjr2cK2cf2eX-sNpNKxMOijk1FqnHHpXA8QOIFSft5bv-y2bNBcbw/exec';
+const backendUrl = 'https://script.google.com/macros/s/AKfycbw5rkLx-fcP-FjL1b3DIBV_LstAH4THS8Jpaq9FGxfqfd5cyBppdVwYG7o49HsYDIhkMg/exec';
 
 const NG_POLLING_INTERVAL = 6000;
 const FILE_SPECS = {
     'door':          { exact: null, min: [512, 1024], max: [1024, 2048], ratio: 0.5, max_mb: 10 },
     'met-icon':      { exact: [100, 100], max_mb: 1 },
     'award-icon':    { exact: [100, 100], max_mb: 1 },
-    'house-base':    { exact: [224, 160], max_mb: 1 },
-    'house-layer':   { exact: [224, 160], max_mb: 1 },
     'sprite-sheet':  { exact: [128, 64], max_mb: 1 },
 };
 
 let currentNgUser = null;
+let currentSessionId = null;
 let ngPollingInterval = null;
 
 async function apiRequest(action, payload = {}) {
@@ -73,10 +72,12 @@ async function loginWithNewgrounds() {
     const statusEl = document.getElementById('login-status');
     statusEl.textContent = 'Contacting server...';
 
+    document.getElementById('ng-login-btn').disabled = true
+
     try {
         const data = await apiRequest('ng_start');
         if (data.error) throw new Error(data.error);
-
+        currentSessionId = data.sessionId;
         window.open(data.passportUrl, '_blank', 'width=600,height=500');
         statusEl.textContent = 'Waiting for you to log in on Newgrounds...';
 
@@ -98,30 +99,33 @@ async function loginWithNewgrounds() {
                 clearInterval(ngPollingInterval);
                 statusEl.textContent = 'Network error while checking login status.';
                 console.error(err);
+                document.getElementById('ng-login-btn').disabled = false
             }
         }, NG_POLLING_INTERVAL);
     } catch (err) {
         statusEl.textContent = 'Login failed. Please try again.';
         console.error(err);
+        document.getElementById('ng-login-btn').disabled = false
     }
 }
 
 async function submitApplication() {
     const statusEl = document.getElementById('status');
+    const submitBtn = document.getElementById('submit-btn');
     
-    if (document.getElementById('website').value) return; // Honeypot
+    submitBtn.disabled = true;
+    if (document.getElementById('website').value) return;
 
     if (!currentNgUser) {
         statusEl.textContent = 'Please log in with Newgrounds first.';
+        submitBtn.disabled = false;
         return;
     }
 
-    submitBtn.disabled = true;
 
     const inputIds = [
         'door', 'idle', 'success', 'fail', 
-        'met-icon', 'award-icon', 
-        'house-base', 'house-layer', 'sprite-sheet'
+        'met-icon', 'award-icon', 'sprite-sheet'
     ];
 
     const filesData = {};
@@ -131,13 +135,12 @@ async function submitApplication() {
         for (const id of inputIds) {
             filesData[id] = await processSingleFile(id);
         }
-
+        const selectedHousing = document.querySelector('input[name="housing-pref"]:checked').value;
         statusEl.textContent = 'Uploading application...';
         const payload = {
-            ngUsername: currentNgUser.name,
-            email: 'test@example.com',
-            message: 'Application submission',
-            files: filesData
+            sessionId: currentSessionId,
+            files: filesData,
+            housingPreference: selectedHousing
         };
 
         const result = await apiRequest('submit_application', payload);
@@ -147,6 +150,7 @@ async function submitApplication() {
             document.getElementById('application-form').style.display = 'none';
         } else {
             statusEl.textContent = `Server error: ${result.message}`;
+            submitBtn.disabled = false;
         }
 
     } catch (err) {

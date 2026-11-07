@@ -157,12 +157,22 @@ button:active {
   display: block;
   margin: 0 auto;
 }
+#ng-login-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #647486;
+}
 
 #submit-btn {
   display: block;
   margin: 2rem auto;
   padding: 12px 40px;
   font-size: 18px;
+}
+#submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #647486;
 }
 
 #login-status, #status {
